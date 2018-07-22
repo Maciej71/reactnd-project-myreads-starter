@@ -6,11 +6,12 @@ import Book from './Book'
 class Shelves extends Component {
 
     static propTypes = {
-        books: PropTypes.array.isRequired
+        books: PropTypes.array.isRequired,
+        onUpdateShelf: PropTypes.func.isRequired
     }
 
     render() {
-        const { books } = this.props
+        const { books, onUpdateShelf } = this.props
 
         function isWantedShelf(book, shelf) {
             return (book.shelf === shelf)
@@ -42,7 +43,10 @@ class Shelves extends Component {
                                         {splitedBooks[index].map(
                                             (book) => (
                                                 <li key={book.id}>
-                                                  <Book book={book}/>
+                                                  <Book 
+                                                    book={ book }
+                                                    onUpdateShelf={ onUpdateShelf }
+                                                  />
                                                 </li>
                                         ))}
                                     </ol>

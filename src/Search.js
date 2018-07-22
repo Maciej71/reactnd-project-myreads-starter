@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
-// import escapeRegExp from 'escape-string-regexp'
 
 class Search extends Component {
 
@@ -13,8 +12,8 @@ class Search extends Component {
     }
 
     updateQuery = (query) => {
-
         if(query) {
+            this.setState({ query: query })
             BooksAPI.search(query.trim()).then((books) => {
                 if(books.length > 0) {
                     this.setState({ books })
@@ -23,10 +22,12 @@ class Search extends Component {
                 }
               } 
             )
-            this.setState({ query: query })
         } else {
             this.setState({ query: '', books: [] })
         }
+        let rrr = query ? "true" : "false"
+        console.log(rrr)
+        console.log("check : " + query)
       }
     
     render() {
@@ -51,7 +52,11 @@ class Search extends Component {
                         type="text" 
                         placeholder="Search by title or author"
                         value={ query }
-                        onChange={(e) => this.updateQuery(e.target.value)}
+                        onChange={(e) => {
+                            this.updateQuery(e.target.value)
+                        console.log(e.target.value)
+                        }
+                    }
                       />
                     </div>
                 </div>
