@@ -42,7 +42,7 @@ class Shelves extends Component {
                                         {splitedBooks[index].map(
                                             (book) => (
                                                 <li key={book.id}>
-                                                <Book book={book}/>
+                                                  <Book book={book}/>
                                                 </li>
                                         ))}
                                     </ol>

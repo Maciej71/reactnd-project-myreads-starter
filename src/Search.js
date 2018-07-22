@@ -1,8 +1,36 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import * as BooksAPI from './BooksAPI'
+import Book from './Book'
+// import escapeRegExp from 'escape-string-regexp'
 
 class Search extends Component {
+
+    state = { 
+        query: '', 
+        books: []
+    }
+
+    updateQuery = (query) => {
+
+        if(query) {
+            BooksAPI.search(query.trim()).then((books) => {
+                if(books.length > 0) {
+                    this.setState({ books })
+                } else {
+                    this.setState({ books: [] })
+                }
+              } 
+            )
+            this.setState({ query: query })
+        } else {
+            this.setState({ query: '', books: [] })
+        }
+      }
+    
     render() {
+        const { query, books } = this.state
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -19,11 +47,23 @@ class Search extends Component {
                         However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                         you don't find a specific author or title. Every search is limited by search terms.
                     */}
-                      <input type="text" placeholder="Search by title or author"/>
+                      <input 
+                        type="text" 
+                        placeholder="Search by title or author"
+                        value={ query }
+                        onChange={(e) => this.updateQuery(e.target.value)}
+                      />
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ol className="books-grid"></ol>
+                    <ol className="books-grid">
+                        {books.map(
+                            (book) => (
+                                <li key={book.id}>
+                                    <Book book={book}/>
+                                </li>
+                        ))}
+                    </ol>
                 </div>
             </div>
         )
