@@ -6,6 +6,11 @@ import Book from './Book'
 
 class Search extends Component {
 
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        onUpdateShelf: PropTypes.func.isRequired
+    }
+
     state = { 
         query: '', 
         books: []
@@ -17,6 +22,20 @@ class Search extends Component {
             BooksAPI.search(query.trim()).then((books) => {
                 if(books.length > 0) {
                     this.setState({ books })
+                    //Books which appear in search results and have been alredy put on shelf
+                    const duplicatedBooks = this.state.books.filter(
+                        (book) => this.props.books.map(
+                            book => book.id).includes(book.id)
+                    )
+                    //Set correct state for books in search results
+                    this.state.books.forEach((book) => {
+                        if(duplicatedBooks.includes(book)) {
+                            book.shelf = this.props.books.find((bookOnShelf) => {
+                                return bookOnShelf.id === book.id
+                            }).shelf
+                        }
+                    })
+                    
                 } else {
                     this.setState({ books: [] })
                 }
@@ -25,13 +44,11 @@ class Search extends Component {
         } else {
             this.setState({ query: '', books: [] })
         }
-        let rrr = query ? "true" : "false"
-        console.log(rrr)
-        console.log("check : " + query)
       }
     
     render() {
         const { query, books } = this.state
+        const { onUpdateShelf } = this.props
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -51,11 +68,8 @@ class Search extends Component {
                       <input 
                         type="text" 
                         placeholder="Search by title or author"
-                        value={ query }
-                        onChange={(e) => {
-                            this.updateQuery(e.target.value)
-                        console.log(e.target.value)
-                        }
+                        value={query}
+                        onChange={(e) => this.updateQuery(e.target.value)
                     }
                       />
                     </div>
@@ -65,7 +79,9 @@ class Search extends Component {
                         {books.map(
                             (book) => (
                                 <li key={book.id}>
-                                    <Book book={book}/>
+                                    <Book book={book}
+                                    onUpdateShelf={ onUpdateShelf }
+                                    />
                                 </li>
                         ))}
                     </ol>
