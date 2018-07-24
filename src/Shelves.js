@@ -17,7 +17,7 @@ class Shelves extends Component {
             return (book.shelf === shelf)
         }
 
-        //Split books by the shelves 
+        //Split books by the shelves
         const currentlyReading = books.filter((book) => isWantedShelf(book, 'currentlyReading'))
         const wantToRead = books.filter((book) => isWantedShelf(book, 'wantToRead'))
         const read = books.filter((book) => isWantedShelf(book, 'read'))
@@ -25,7 +25,6 @@ class Shelves extends Component {
         const splitedBooks =[currentlyReading, wantToRead, read]
         const shelvesNames = ['Currently Reading', 'Want to Read', 'Read']
 
-        console.log(currentlyReading)
         return (
             <div className="list-books">
             <div className="list-books-title">
@@ -43,7 +42,7 @@ class Shelves extends Component {
                                         {splitedBooks[index].map(
                                             (book) => (
                                                 <li key={book.id}>
-                                                  <Book 
+                                                  <Book
                                                     book={ book }
                                                     onUpdateShelf={ onUpdateShelf }
                                                   />
